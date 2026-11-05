@@ -7,65 +7,32 @@ const app = express();
 app.use(express.json());
 
 const client = new MongoClient(process.env.MONGO_URI);
-const produtos = client.db('loja').collection('produtos');// Importando as bibliotecas
+const jogos = client.db('catalogo_games').collection('jogos');
 
 // Criando os métodos HTTP:
-app.post('/produtos',async(req,res)=>{
-    const novoProduto = await produtos.insertOne(req.body);
-    res.status(201).json(novoProduto);
+app.post('/jogos',async(req,res)=>{
+    const novoJogo = await jogos.insertOne(req.body);
+    res.status(201).json(novoJogo);
 });
 
-app.get('/produtos',async(req,res)=>{
-    const listaProdutos = await produtos.find().toArray();
-    res.json(listaProdutos);
+app.get('/jogos',async(req,res)=>{
+    const listaJogos = await jogos.find().toArray();
+    res.json(listaJogos);
 });
 
-app.get('/produtos/:id',async(req,res)=>{
-    const produtoEspecifico = await produtos.findOne({_id:new ObjectId(req.params.id)});
-    res.json(produtoEspecifico);
+app.get('/jogos/:id',async(req,res)=>{
+    const jogoEspecifico = await jogos.findOne({_id:new ObjectId(req.params.id)});
+    res.json(jogoEspecifico);
 });
 
-app.put('/produtos/:id',async(req,res)=>{
-    const produtoAtualizado = await produtos.updateOne({_id:new ObjectId(req.params.id)},{$set: req.body});
-    res.json(produtoAtualizado);
+app.put('/jogos/:id',async(req,res)=>{
+    const jogoAtualizado = await jogos.updateOne({_id:new ObjectId(req.params.id)},{$set: req.body});
+    res.json(jogoAtualizado);
 });
 
-app.delete('/produtos/:id',async(req,res)=>{
-    const produtoDeletado = await produtos.deleteOne({_id: new ObjectId(req.params.id)});
-    res.json(produtoDeletado);
-});
-
-client.connect()
-    .then(()=>{
-        console.log('CONECTADO AO MONGODB'),
-        app.listen(3000,()=>console.log('API RODANDO NA PORTA 3000'))
-    })
-    .catch((erro)=>console.log('ERRO AO CONECTAR',erro.message))
-
-// Criando os métodos HTTP:
-app.post('/produtos',async(req,res)=>{
-    const novoProduto = await produtos.insertOne(req.body);
-    res.status(201).json(novoProduto);
-});
-
-app.get('/produtos',async(req,res)=>{
-    const listaProdutos = await produtos.find().toArray();
-    res.json(listaProdutos);
-});
-
-app.get('/produtos/:id',async(req,res)=>{
-    const produtoEspecifico = await produtos.findOne({_id:new ObjectId(req.params.id)});
-    res.json(produtoEspecifico);
-});
-
-app.put('/produtos/:id',async(req,res)=>{
-    const produtoAtualizado = await produtos.updateOne({_id:new ObjectId(req.params.id)},{$set: req.body});
-    res.json(produtoAtualizado);
-});
-
-app.delete('/produtos/:id',async(req,res)=>{
-    const produtoDeletado = await produtos.deleteOne({_id: new ObjectId(req.params.id)});
-    res.json(produtoDeletado);
+app.delete('/jogos/:id',async(req,res)=>{
+    const jogoDeletado = await jogos.deleteOne({_id: new ObjectId(req.params.id)});
+    res.json(jogoDeletado);
 });
 
 client.connect()
